@@ -4,5 +4,7 @@ github.com/ian-howell/gocurse v0.0.0-20190518022925-0f02fa80ade0 h1:No5CPu5Myje8
 github.com/ian-howell/gocurse v0.0.0-20190518022925-0f02fa80ade0/go.mod h1:tA7eSdVoq7Cc7AsM1CEm7RYLDwAjeC1Wz4auI3dbWvo=
 github.com/ian-howell/gocurse v0.0.0-20190518023429-6b4096b3bd1c h1:v9IXY4+/yulKZ+WQ9mdJb8RHNn9yU1X3UoP/rDnDxLA=
 github.com/ian-howell/gocurse v0.0.0-20190518023429-6b4096b3bd1c/go.mod h1:tA7eSdVoq7Cc7AsM1CEm7RYLDwAjeC1Wz4auI3dbWvo=
+github.com/ian-howell/gocurse v0.0.0-20190518041647-07add7f6f4d3 h1:k+eJRsd6PezxhN7i1SaWtyFqGjKD55jUtSHi0+XjNhQ=
+github.com/ian-howell/gocurse v0.0.0-20190518041647-07add7f6f4d3/go.mod h1:tA7eSdVoq7Cc7AsM1CEm7RYLDwAjeC1Wz4auI3dbWvo=
 github.com/mpatraw/gocurse v0.0.0-20151016042152-16f41dec53bc h1:1YUXC9irZc+Z7ook/WBH2rMrnX/kQSprEqH2Tx0JsAA=
 github.com/mpatraw/gocurse v0.0.0-20151016042152-16f41dec53bc/go.mod h1:e9U3s5pzluK7SKWjpuFEyUSVT0goz77K3zu2Vk7kWIs=

@@ -22,8 +22,6 @@ func main() {
 		os.Exit(1)
 	}
 
-	screen.Addstr(0, 0, "Press ctrl-d to quit...", 0)
-
 	Play(screen)
 }
 
@@ -45,19 +43,24 @@ func Initialize(screen *curses.Window) error {
 	if err := curses.Curs_set(0); err != nil {
 		return err
 	}
+	if err := curses.Start_color(); err != nil {
+		return err
+	}
+	curses.Init_pair(0, curses.COLOR_WHITE, curses.COLOR_BLACK)
+	curses.Init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
 	return nil
 }
 
 func Play(screen *curses.Window) error {
-	curses.DoUpdate()
+	puzzle := NewGrid(4)
+	puzzle.Draw()
 forloop:
 	for {
-
 		switch screen.Getch() {
 		case EOF:
 			break forloop
 		}
-		curses.DoUpdate()
+		puzzle.Draw()
 	}
 
 	return nil
