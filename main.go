@@ -54,9 +54,18 @@ func Initialize(screen *curses.Window) error {
 func Play(screen *curses.Window) error {
 	puzzle := NewGrid(4)
 	puzzle.Draw()
+
+	keyMap := map[int]Direction{
+		curses.KEY_UP:    Up,
+		curses.KEY_DOWN:  Down,
+		curses.KEY_LEFT:  Left,
+		curses.KEY_RIGHT: Right,
+	}
 forloop:
 	for {
-		switch screen.Getch() {
+		switch ch := screen.Getch(); ch {
+		case curses.KEY_UP, curses.KEY_DOWN, curses.KEY_LEFT, curses.KEY_RIGHT:
+			puzzle.Move(keyMap[ch])
 		case EOF:
 			break forloop
 		}

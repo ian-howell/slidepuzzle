@@ -11,6 +11,7 @@ import (
 type Grid struct {
 	Size    int
 	cells   []int
+	point   int
 	window  *curses.Window
 	numrows int
 	numcols int
@@ -18,6 +19,15 @@ type Grid struct {
 	fgColor int32
 	panel   *panels.Panel
 }
+
+type Direction int
+
+const (
+	Up Direction = iota
+	Down
+	Left
+	Right
+)
 
 func NewGrid(size int) *Grid {
 	g := &Grid{
@@ -36,6 +46,7 @@ func NewGrid(size int) *Grid {
 		}
 	}
 	g.cells[(size*size)-1] = 0
+	g.point = (size * size) - 1
 	g.Shuffle()
 	g.window, _ = curses.Newwin(g.numrows, g.numcols, 0, 0)
 	g.panel = panels.NewPanel(g.window)
@@ -44,7 +55,18 @@ func NewGrid(size int) *Grid {
 }
 
 func (g *Grid) At(row, col int) int {
-	return g.cells[row*g.Size+col]
+	return g.cells[g.RowColToCellNumber(row, col)]
+}
+
+func (g *Grid) CellNumberToRowCol(cell int) (row, col int) {
+	row = cell / g.Size
+	col = cell % g.Size
+	return row, col
+}
+
+func (g *Grid) RowColToCellNumber(row, col int) (cell int) {
+	cell = row*g.Size + col
+	return cell
 }
 
 func (g *Grid) Draw() {
@@ -64,6 +86,46 @@ func (g *Grid) Shuffle() {
 		randIndex := r.Intn(n)
 		g.cells[n-1], g.cells[randIndex] = g.cells[randIndex], g.cells[n-1]
 	}
+}
+
+func (g *Grid) Move(d Direction) {
+	row, col := g.CellNumberToRowCol(g.Point())
+	newrow, newcol := row, col
+	switch d {
+	case Up:
+		newrow++
+	case Down:
+		newrow--
+	case Left:
+		newcol++
+	case Right:
+		newcol--
+	}
+	if !g.Valid(newrow, newcol) {
+		return
+	}
+	g.Swap(row, col, newrow, newcol)
+}
+
+func (g *Grid) Point() int {
+	if g.cells[g.point] == 0 {
+		return g.point
+	}
+	g.point = 0
+	for g.cells[g.point] != 0 {
+		g.point++
+	}
+	return g.point
+}
+
+func (g *Grid) Valid(r, c int) bool {
+	return 0 <= c && c < g.Size && 0 <= r && r < g.Size
+}
+
+func (g *Grid) Swap(r1, c1, r2, c2 int) {
+	cell1 := g.RowColToCellNumber(r1, c1)
+	cell2 := g.RowColToCellNumber(r2, c2)
+	g.cells[cell1], g.cells[cell2] = g.cells[cell2], g.cells[cell1]
 }
 
 func (g *Grid) printAt(r, c int) {
