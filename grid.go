@@ -80,11 +80,10 @@ func (g *Grid) Draw() {
 }
 
 func (g *Grid) Shuffle() {
-	// Uses the Fisher-Yates algorithm
+	// Just do a whole bunch of random moves
 	r := rand.New(rand.NewSource(time.Now().Unix()))
-	for n := len(g.cells); n > 0; n-- {
-		randIndex := r.Intn(n)
-		g.cells[n-1], g.cells[randIndex] = g.cells[randIndex], g.cells[n-1]
+	for i := 0; i < 5000; i++ {
+		g.Move(Direction(r.Intn(4)))
 	}
 }
 
