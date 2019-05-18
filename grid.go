@@ -1,6 +1,9 @@
 package main
 
 import (
+	"math/rand"
+	"time"
+
 	"github.com/ian-howell/gocurse/curses"
 	"github.com/ian-howell/gocurse/panels"
 )
@@ -33,6 +36,7 @@ func NewGrid(size int) *Grid {
 		}
 	}
 	g.cells[(size*size)-1] = 0
+	g.Shuffle()
 	g.window, _ = curses.Newwin(g.numrows, g.numcols, 0, 0)
 	g.panel = panels.NewPanel(g.window)
 	panels.UpdatePanels()
@@ -51,6 +55,15 @@ func (g *Grid) Draw() {
 	}
 	panels.UpdatePanels()
 	curses.DoUpdate()
+}
+
+func (g *Grid) Shuffle() {
+	// Uses the Fisher-Yates algorithm
+	r := rand.New(rand.NewSource(time.Now().Unix()))
+	for n := len(g.cells); n > 0; n-- {
+		randIndex := r.Intn(n)
+		g.cells[n-1], g.cells[randIndex] = g.cells[randIndex], g.cells[n-1]
+	}
 }
 
 func (g *Grid) printAt(r, c int) {
