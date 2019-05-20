@@ -10,7 +10,7 @@ import (
 
 type Grid struct {
 	Size    int
-	cells   []int
+	cells   []rune
 	point   int
 	window  *curses.Window
 	numrows int
@@ -29,24 +29,21 @@ const (
 	Right
 )
 
-func NewGrid(size int) *Grid {
+const solvedPosition = "123456789ABCDEF0"
+
+func NewGrid() *Grid {
 	g := &Grid{
-		Size:    size,
-		cells:   make([]int, size*size),
-		numrows: (4 * size) + 1,
-		numcols: (4 * size) + 1,
+		Size:    4,
+		cells:   make([]rune, 16),
+		numrows: 17,
+		numcols: 17,
 		bgColor: curses.Color_pair(1),
 		fgColor: curses.Color_pair(0),
 	}
-	for i := 0; i < (size*size)-1; i++ {
-		if i+1 < 10 {
-			g.cells[i] = int('0') + i + 1
-		} else {
-			g.cells[i] = int('A') + i - 9
-		}
+	for i, val := range solvedPosition {
+		g.cells[i] = val
 	}
-	g.cells[(size*size)-1] = 0
-	g.point = (size * size) - 1
+	g.point = 15
 	g.Shuffle()
 	g.window, _ = curses.Newwin(g.numrows, g.numcols, 0, 0)
 	g.panel = panels.NewPanel(g.window)
@@ -54,7 +51,7 @@ func NewGrid(size int) *Grid {
 	return g
 }
 
-func (g *Grid) At(row, col int) int {
+func (g *Grid) At(row, col int) rune {
 	return g.cells[g.RowColToCellNumber(row, col)]
 }
 
@@ -107,11 +104,11 @@ func (g *Grid) Move(d Direction) {
 }
 
 func (g *Grid) Point() int {
-	if g.cells[g.point] == 0 {
+	if g.cells[g.point] == '0' {
 		return g.point
 	}
 	g.point = 0
-	for g.cells[g.point] != 0 {
+	for g.cells[g.point] != '0' {
 		g.point++
 	}
 	return g.point
@@ -131,8 +128,8 @@ func (g *Grid) printAt(r, c int) {
 	if g.isBorder(r, c) {
 		g.window.Addch(c, r, ' ', g.bgColor)
 	} else if g.isNumber(r, c) {
-		num := int32(g.At((r-2)/4, (c-2)/4))
-		if num > 0 {
+		num := g.At((r-2)/4, (c-2)/4)
+		if num != '0' {
 			g.window.Addch(c, r, num, g.fgColor)
 		} else {
 			g.window.Addch(c, r, ' ', g.fgColor)

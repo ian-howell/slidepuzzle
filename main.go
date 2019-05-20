@@ -52,7 +52,7 @@ func Initialize(screen *curses.Window) error {
 }
 
 func Play(screen *curses.Window) error {
-	puzzle := NewGrid(4)
+	puzzle := NewGrid()
 	puzzle.Draw()
 
 	keyMap := map[int]Direction{
