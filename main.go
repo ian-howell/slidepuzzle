@@ -69,6 +69,10 @@ forloop:
 		case EOF:
 			break forloop
 		}
+
+		if puzzle.Solved() {
+			break
+		}
 		puzzle.Draw()
 	}
 

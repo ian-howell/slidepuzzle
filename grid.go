@@ -124,6 +124,15 @@ func (g *Grid) Swap(r1, c1, r2, c2 int) {
 	g.cells[cell1], g.cells[cell2] = g.cells[cell2], g.cells[cell1]
 }
 
+func (g *Grid) Solved() bool {
+	for i, v := range g.cells {
+		if v != rune(solvedPosition[i]) {
+			return false
+		}
+	}
+	return true
+}
+
 func (g *Grid) printAt(r, c int) {
 	if g.isBorder(r, c) {
 		g.window.Addch(c, r, ' ', g.bgColor)
